@@ -49,5 +49,33 @@
     </div>
   </div>
 
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+      const lista = document.querySelector("#publishers");
+
+      function obtenerPublishers(){
+        const parametros = new URLSearchParams();
+        parametros.append("operacion", "listar");
+
+        fetch('./controller/publisher.php', {
+          method: 'POST',
+          body: parametros
+        })
+          .then(respuesta => respuesta.json())
+          .then(datos => {
+            datos.forEach(element => {
+              const optionTag = document.createElement("option");
+              optionTag.value = element.id;
+              optionTag.text = element.publisher_name;
+              lista.appendChild(optionTag);
+            });
+          });
+      }
+
+      obtenerPublishers();
+    })
+  </script>
+
 </body>
 </html>
