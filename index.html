@@ -28,7 +28,7 @@
     <!-- Tabla -->
     <div class="row">
       <div class="col-md-12">
-        <table class="table table-sm table-striped">
+        <table id="table-superhero" class="table table-sm table-striped">
           <thead>
             <tr>
               <th>ID</th>
@@ -52,8 +52,12 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
 
+      //Objetos
+      const tabla = document.querySelector("#table-superhero");
+      const cuerpoTabla = tabla.querySelector("tbody");
       const lista = document.querySelector("#publishers");
 
+      //Funciones
       function obtenerPublishers(){
         const parametros = new URLSearchParams();
         parametros.append("operacion", "listar");
@@ -73,6 +77,43 @@
           });
       }
 
+      function obtenerSuperHeros(){
+        const parametros = new URLSearchParams();
+        parametros.append("operacion", "listar");
+        parametros.append("publisher_id", parseInt(lista.value));
+
+        fetch('./controller/superhero.php', {
+          method: 'POST',
+          body: parametros
+        })
+          .then(respuesta => respuesta.json())
+          .then(datos => {
+            
+            //Renderizamos los datos (debemos crear 2 nuevos objetos)
+            cuerpoTabla.innerHTML = ``;
+            datos.forEach(element => {
+              const fila = `
+              <tr>
+                <td>${element.id}</td>
+                <td>${element.superhero_name}</td>
+                <td>${element.full_name}</td>
+                <td>${element.gender}</td>
+                <td>${element.skin_colour}</td>
+                <td>${element.race}</td>
+                <td>${element.alignment}</td>
+                <td>${element.height_cm}</td>
+              </tr>
+              `;
+              cuerpoTabla.innerHTML += fila;
+            });
+
+          });
+      }
+
+      //Eventos
+      lista.addEventListener("change", obtenerSuperHeros);
+
+      //Función carga cuando documento esté listo
       obtenerPublishers();
     })
   </script>

@@ -1,5 +1,7 @@
 <?php
 
+require_once 'Conexion.php';
+
 class SuperHero extends Conexion{
 
   private $conexion;
