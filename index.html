@@ -64,6 +64,7 @@
     document.addEventListener("DOMContentLoaded", () => {
 
       //Objetos
+      const exportarPDF = document.querySelector("#exportar");
       const tabla = document.querySelector("#table-superhero");
       const cuerpoTabla = tabla.querySelector("tbody");
       const lista = document.querySelector("#publishers");
@@ -121,8 +122,16 @@
           });
       }
 
+      function generarPDF(){
+        const parametros = new URLSearchParams();
+        parametros.append("publisher_id", parseInt(lista.value));
+        parametros.append("titulo", lista.options[lista.selectedIndex].text);
+        window.open(`./reports/superhero.report.php?${parametros}`, '_blank');
+      }
+
       //Eventos
       lista.addEventListener("change", obtenerSuperHeros);
+      exportarPDF.addEventListener("click", generarPDF);
 
       //Función carga cuando documento esté listo
       obtenerPublishers();

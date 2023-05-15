@@ -1,4 +1,4 @@
-<h1 class="text-md text-center">Reporte de superheroes</h1>
+<h1 class="text-md text-center"><?=$titulo?></h1>
 
 <table class="table table-border mt-3">
   <colgroup>
