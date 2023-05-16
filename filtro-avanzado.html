@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filtros avanzados</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+<body>
+  
+  <div class="container">
+    <!-- Fila designada para los controles de filtro -->
+    <div class="row mt-2">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header bg-info text-light">
+            Filtros avanzados
+          </div>
+          <div class="card-body">
+            <!-- Aquí construye el formulario -->
+            <form action="" autocomplete="off" id="form-filters">
+              <div class="row">
+                <div class="col-md-3"> <!-- Primera lista -->
+                  <div class="form-floating">
+                    <select name="razas" id="razas" class="form-select">
+                      <option value="">Seleccione</option>
+                    </select>
+                    <label for="razas">Razas</label>
+                  </div>
+                </div> <!-- Fin primera lista -->
+                <div class="col-md-3"> <!-- Segunda lista -->
+                  <div class="form-floating">
+                    <select name="generos" id="generos" class="form-select">
+                      <option value="">Seleccione</option>
+                    </select>
+                    <label for="razas">Géneros</label>
+                  </div>
+                </div> <!-- Fin segunda lista -->
+                <div class="col-md-3"> <!-- Tercera lista -->
+                  <div class="form-floating">
+                    <select name="bandos" id="bandos" class="form-select">
+                      <option value="">Seleccione</option>
+                    </select>
+                    <label for="razas">Bandos</label>
+                  </div>
+                </div> <!-- Fin tercera lista -->
+                <div class="col-md-3"> <!-- Contenedor para botones -->
+                  <div class="d-grid"> <!-- Ocupar 100% -->
+                    <div class="btn-group-vertical" role="group"> <!-- Botones en gropo vertical -->
+                      <button class="btn btn-sm btn-outline-secondary" type="button" id="filtrar">Filtrar datos</button>
+                      <button class="btn btn-sm btn-outline-secondary" type="button" id="exportar">Exportar PDF</button>
+                    </div>
+                  </div>
+                </div> <!-- Fin contenedor botones -->
+              </div> <!-- Fin row -->
+            </form> <!-- Fin formulario -->
+          </div> <!-- Fin card-body -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Espacio para la tabla -->
+    <div class="row">
+      <table class="table table-sm" id="table-superhero">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>SuperHero Name</th>
+            <th>Hair colour</th>
+            <th>Publisher</th>
+            <th>Weight kg</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Asíncrono -->
+        </tbody>
+      </table>
+    </div> <!-- Fin row -->
+  </div> <!-- Fin container -->
+
+</body>
+</html>
