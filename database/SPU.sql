@@ -52,5 +52,13 @@ BEGIN
 	ORDER BY superhero.`id`;
 END $$
 
-
-
+/* Contabilizar cuántos super hérores existen por bando (alignment) */
+DELIMITER $$
+CREATE PROCEDURE spu_superhero_alignment_resume()
+BEGIN
+	SELECT	alignment.`alignment`,
+				COUNT(superhero.`id`) 'total'
+		FROM superhero
+		LEFT JOIN alignment ON alignment.`id` = superhero.`alignment_id`
+		GROUP BY alignment.`alignment`;
+END $$
