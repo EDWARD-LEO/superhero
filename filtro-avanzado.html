@@ -81,5 +81,53 @@
       </div>
   </div> <!-- Fin container -->
 
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+      const selectGeneros = document.querySelector("#generos");
+      const selectRazas = document.querySelector("#razas");
+
+      //Función que permite poblar cualquiera de los select
+      function getSelectData(operacion = "", objectSelect){
+        const parametros = new URLSearchParams();
+        parametros.append("operacion", operacion);
+        fetch('./controller/filters.php', {
+          method: 'POST',
+          body: parametros
+        })
+          .then(respuesta => respuesta.json())
+          .then(datos => {
+            console.log(datos);
+            datos.forEach(element => {
+              const optionTAG = document.createElement("option");
+              optionTAG.value = element[0];
+              optionTAG.text = element[1];
+              objectSelect.appendChild(optionTAG);
+            });
+          });
+      }
+
+      //getSelectData("listarRazas");
+      getSelectData("listarGeneros", selectGeneros);
+      getSelectData("listarRazas", selectRazas);
+
+      /*
+      const parametros = new URLSearchParams();
+      parametros.append("operacion", "listarRazas");
+      fetch('./controller/filters.php', {
+        method: 'POST',
+        body: parametros
+      })
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+          console.log(datos);
+        });
+      */
+      
+
+    });
+  </script>
+
 </body>
 </html>

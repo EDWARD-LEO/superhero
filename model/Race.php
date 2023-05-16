@@ -14,7 +14,7 @@ class Race extends Conexion{
     try{
       $consulta = $this->conexion->prepare("SELECT * FROM race");
       $consulta->execute();
-      return $consulta->fetchAll(PDO::FETCH_ASSOC);
+      return $consulta->fetchAll(PDO::FETCH_NUM);
     }
     catch(Exception $e){
       die($e->getMessage());

@@ -14,7 +14,7 @@ class Gender extends Conexion{
     try{
       $consulta = $this->conexion->prepare("SELECT * FROM gender");
       $consulta->execute();
-      return $consulta->fetchAll(PDO::FETCH_ASSOC);
+      return $consulta->fetchAll(PDO::FETCH_NUM);
     }
     catch(Exception $e){
       die($e->getMessage());
