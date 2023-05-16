@@ -88,6 +88,7 @@
       const selectRazas = document.querySelector("#razas");
       const selectBandos = document.querySelector("#bandos");
       const btFiltrar = document.querySelector("#filtrar");
+      const btExportar = document.querySelector("#exportar");
       const cuerpoTabla = document.querySelector("#table-superhero tbody");
 
       //Función que permite poblar cualquiera de los select
@@ -144,6 +145,27 @@
           });
       }
 
+      function createPDF(){
+        const parametros = new URLSearchParams();
+        parametros.append("race_id", parseInt(selectRazas.value));
+        parametros.append("gender_id", parseInt(selectGeneros.value));
+        parametros.append("alignment_id", parseInt(selectBandos.value));
+
+        //También tendremos que enviar el título (se obtiene de cada SELECT)
+        let titulo = '';
+        titulo += selectBandos.options[selectBandos.selectedIndex].text.trim() + " - ";
+        titulo += selectGeneros.options[selectGeneros.selectedIndex].text.trim() + " - ";
+        titulo += selectRazas.options[selectRazas.selectedIndex].text.trim();
+        
+        //Título estructurado, lo podemos enviar
+        parametros.append("titulo", titulo);
+
+        console.log(titulo);
+
+        //URL destino
+        window.open(`./reports/superhero.filter.report.php?${parametros}`, `_blank`);
+      }
+
       //Se invoca a cada proceso especificando la lista donde deberá renderizar
       getSelectData("listarGeneros", selectGeneros);
       getSelectData("listarRazas", selectRazas);
@@ -151,6 +173,7 @@
 
       //Renderizando tabla
       btFiltrar.addEventListener("click", renderSuperHero);
+      btExportar.addEventListener("click", createPDF);
     });
   </script>
 
