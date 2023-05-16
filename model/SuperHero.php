@@ -21,4 +21,21 @@ class SuperHero extends Conexion{
     }
   }
 
+  public function filtrarSuperHero($filtros = []){
+    try{
+      $consulta = $this->conexion->prepare("CALL spu_superhero_filter_multiple(?,?,?)");
+      $consulta->execute(
+        array(
+          $filtros['race_id'],
+          $filtros['gender_id'],
+          $filtros['alignment_id']
+        )
+      );
+      return $consulta->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch(Exception $e){
+      die($e->getMessage);
+    }
+  }
+
 }

@@ -28,4 +28,29 @@ BEGIN
 	ORDER BY superhero.`id`;
 END $$
 
-CALL spu_superhero_list(2);
+
+DELIMITER $$
+CREATE PROCEDURE spu_superhero_filter_multiple
+(
+	IN _race_id 		INT,
+	IN _gender_id 		INT,
+	IN _alignment_id	INT
+)
+BEGIN
+	SELECT
+		superhero.`id`,
+		superhero.`superhero_name`,
+		colour.`colour` 'hair_colour',
+		publisher.`publisher_name`,
+		superhero.`weight_kg`
+	FROM superhero
+		INNER JOIN colour ON colour.`id` = superhero.`hair_colour_id`
+		LEFT JOIN publisher ON publisher.`id` = superhero.`publisher_id`
+	WHERE 	superhero.`race_id` = _race_id 		AND 
+				superhero.`gender_id` = _gender_id 	AND
+				superhero.`alignment_id` = _alignment_id
+	ORDER BY superhero.`id`;
+END $$
+
+
+

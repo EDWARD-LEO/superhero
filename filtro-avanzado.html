@@ -84,9 +84,11 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-
       const selectGeneros = document.querySelector("#generos");
       const selectRazas = document.querySelector("#razas");
+      const selectBandos = document.querySelector("#bandos");
+      const btFiltrar = document.querySelector("#filtrar");
+      const cuerpoTabla = document.querySelector("#table-superhero tbody");
 
       //Función que permite poblar cualquiera de los select
       function getSelectData(operacion = "", objectSelect){
@@ -98,9 +100,9 @@
         })
           .then(respuesta => respuesta.json())
           .then(datos => {
-            console.log(datos);
             datos.forEach(element => {
               const optionTAG = document.createElement("option");
+              //Actualización: no se utilizará claves, sino índices FETCH_NUM
               optionTAG.value = element[0];
               optionTAG.text = element[1];
               objectSelect.appendChild(optionTAG);
@@ -108,24 +110,47 @@
           });
       }
 
-      //getSelectData("listarRazas");
+      //Construye la tabla de acuerdo a los criterios de búsqueda
+      function renderSuperHero(){
+        const parametros = new URLSearchParams();
+        parametros.append("operacion", "filtrar");
+        parametros.append("race_id", parseInt(selectRazas.value));
+        parametros.append("gender_id", parseInt(selectGeneros.value));
+        parametros.append("alignment_id", parseInt(selectBandos.value));
+
+        fetch(`./controller/superhero.php`, {
+          method: 'POST',
+          body: parametros
+        })
+          .then(respuesta => respuesta.json())
+          .then(datos => {
+            cuerpoTabla.innerHTML = ``;
+            datos.forEach(element => {
+              const nuevaFila = `
+              <tr>
+                <td>${element.id}</td>
+                <td>${element.superhero_name}</td>
+                <td>${element.hair_colour}</td>
+                <td>${element.publisher_name}</td>
+                <td>${element.weight_kg}</td>
+              </tr>
+              `;
+              cuerpoTabla.innerHTML += nuevaFila;
+            });
+          })
+          .catch(error => {
+            cuerpoTabla.innerHTML = ``;
+            alert('No encontramos datos');
+          });
+      }
+
+      //Se invoca a cada proceso especificando la lista donde deberá renderizar
       getSelectData("listarGeneros", selectGeneros);
       getSelectData("listarRazas", selectRazas);
+      getSelectData("listarBandos", selectBandos);
 
-      /*
-      const parametros = new URLSearchParams();
-      parametros.append("operacion", "listarRazas");
-      fetch('./controller/filters.php', {
-        method: 'POST',
-        body: parametros
-      })
-        .then(respuesta => respuesta.json())
-        .then(datos => {
-          console.log(datos);
-        });
-      */
-      
-
+      //Renderizando tabla
+      btFiltrar.addEventListener("click", renderSuperHero);
     });
   </script>
 
