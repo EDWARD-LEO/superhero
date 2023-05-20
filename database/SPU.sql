@@ -8,9 +8,9 @@ BEGIN
 		superhero.`superhero_name`,
 		superhero.`full_name`,
 		gender.`gender`,
-		c1.`colour`,
-		c2.`colour`,
-		c3.`colour`,
+		c1.`colour` 'eye_colour',
+		c2.`colour` 'hair_colour',
+		c3.`colour` 'skin_colour',
 		race.`race`,
 		publisher.`publisher_name`,
 		alignment.`alignment`,
@@ -68,3 +68,33 @@ BEGIN
 END $$
 
 CALL spu_superhero_alignment_resume();
+
+CREATE VIEW view_superhero_aligment
+	AS
+	SELECT	
+		superhero.`publisher_id`,
+		CASE 
+			WHEN alignment.`alignment` IS NULL THEN 'Ninguno'
+			WHEN alignment.`alignment` IS NOT NULL THEN alignment.`alignment`
+		END 'aligment'
+	FROM `superhero`
+	LEFT JOIN alignment ON alignment.`id` = superhero.`alignment_id`;
+
+-- Obtenemos el total de superheroes de acuerdo a su bando de la productora indicada
+DELIMITER $$
+CREATE PROCEDURE spu_superhero_getalignment_by_publisher(IN _publisher_id INT)
+BEGIN
+	SELECT
+		aligment,
+		COUNT(aligment) 'total'
+		FROM view_superhero_aligment
+		WHERE publisher_id = _publisher_id
+		GROUP BY aligment;
+END $$
+
+-- Con 13 serían:
+-- Bad 		118
+-- Good 		256
+-- Neutral	10
+-- Ninguno	 3
+CALL spu_superhero_getalignment_by_publisher(2);

@@ -29,4 +29,9 @@ if (isset($_POST['operacion'])){
     renderJSON($datos);
   }
 
+  if ($_POST['operacion'] == 'filtrar_publishers'){
+    $datos = $superhero->getAlignmentByPublisher($_POST['publisher_id']);
+    renderJSON($datos);
+  }
+
 }

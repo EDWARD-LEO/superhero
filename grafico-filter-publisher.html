@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seleccione casa editora</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+<body>
+  
+  <div class="container">
+
+    <div class="row mt-3">
+      <div class="col-md-12">
+        <div class="form-floating">
+          <select name="publishers" id="publishers" class="form-select">
+            <option value="">Seleccione</option>
+          </select>
+          <label for="publishers">Seleccione productora</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-md-7 text-center">
+        <div style="width: 40rem; display: inline-block;">
+          <canvas id="grafico"></canvas>
+        </div>
+      </div>
+      <div class="col-md-5 text-start">
+        <h3>Resultados:</h3>
+        <ul>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CND Librería para crear gráficos -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+      const selectPublishers = document.querySelector("#publishers");
+      const lienzo = document.querySelector("#grafico");
+      const lista = document.querySelector("ul");
+
+      //Construyendo gráfico
+      const grafico = new Chart(lienzo, {
+        type: 'pie',
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: 'Bando',
+              data: [],
+              backgroundColor: ['#CB4335', '#28B463', '#D68910', '#F7DC6F']
+            }
+          ]
+        }
+      });
+
+      function getPublishers(){
+        const parametros = new URLSearchParams();
+        parametros.append("operacion", "listar");
+
+        fetch(`./controller/publisher.php`, {
+          method: 'POST',
+          body: parametros
+        })
+          .then(respuesta => respuesta.json())
+          .then(datos => {
+            datos.forEach(element => {
+              const optionTAG = document.createElement("option");
+              optionTAG.value = element.id;
+              optionTAG.text = element.publisher_name;
+              selectPublishers.appendChild(optionTAG);
+            });
+          });
+      }
+
+      function renderGraphic(datos = []){
+        let etiquetas = [];
+        let valores = [];
+
+        lista.innerHTML = ``;
+        
+        datos.forEach(element => {
+          const tagLI = document.createElement("li");
+          etiquetas.push(element.aligment);
+          valores.push(element.total);
+          tagLI.innerHTML = `${element.aligment}: ${element.total}`;
+          lista.appendChild(tagLI);
+        });
+
+        grafico.data.labels = etiquetas;
+        grafico.data.datasets[0].data = valores;
+        grafico.update();
+      }
+
+      function publisherFilter(){
+        const parametros = new URLSearchParams();
+        parametros.append("operacion", "filtrar_publishers");
+        parametros.append("publisher_id", parseInt(selectPublishers.value));
+
+        fetch(`./controller/superhero.php`, {
+          method: 'POST',
+          body: parametros
+        })
+          .then(respuesta => respuesta.json())
+          .then(datos => {
+            renderGraphic(datos);
+          });
+      }
+
+      //Eventos
+      selectPublishers.addEventListener("change", publisherFilter);
+      
+      //Invocado automáticamente
+      getPublishers();
+
+    });
+  </script>
+
+</body>
+</html>

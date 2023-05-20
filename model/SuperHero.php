@@ -49,4 +49,15 @@ class SuperHero extends Conexion{
     }
   }
 
+  public function getAlignmentByPublisher($publisher_id){
+    try{
+      $consulta = $this->conexion->prepare("CALL spu_superhero_getalignment_by_publisher(?)");
+      $consulta->execute(array($publisher_id));
+      return $consulta->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch(Exception $e){
+      die($e->getMessage);
+    }
+  }
+
 }
